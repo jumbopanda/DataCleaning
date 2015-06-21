@@ -72,7 +72,7 @@ names(no5_tidy_sd) <- c("Activity", named, "Function")
 no5_tidy <- rbind(no5_tidy_means, no5_tidy_sd)
 
 ## Output
-write.table(no5_tidy_means, "no5_tidy_output.txt")
+write.table(no5_tidy_means, "no5_tidy_output.txt", row.names=FALSE)
 
 
 
