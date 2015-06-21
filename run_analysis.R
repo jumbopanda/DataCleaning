@@ -40,16 +40,36 @@ cleaned <- merge(activities, data_r, by.x="V1", by.y="Activity", all=TRUE)
 named<- names(cleaned[,3:49])
 names(cleaned) <- c("ActivityID", "Activity", named)
 
+## remove ActivityID column from cleaned
+cleaned <- cleaned[2:49]
+
 ## write out cleaned data set
 ## write.table(cleaned, "merged_clean_data.txt")
 
 ## 5:  Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-## melt data with 2 factors:  Activity and Subject
-melted <- melt(cleaned, id=c("Activity", "Subject"), measure.vars=c(names(cleaned[3:49])))
+## melt data with 2 factors:  Activity and Subject, use column name vector as vars
+melted <- melt(cleaned, id=c("Activity", "Subject"), measure.vars=c(names(cleaned[3:48])))
 
 ## Calculate Means by Subject for each Activity using dcast
+## add a 'means' indicator on each row to identify the function
+## Reset all column names
+
 no5_tidy_means <- dcast(melted, Subject + Activity ~ variable, mean)
+no5_tidy_means[,49] <- "mean"
+names(no5_tidy_means) <- c("Activity", named, "Function")
+
+## Calculate StDev by Subject for each Activity using dcast
+## add a 'St_Dev' indicator on each row to identify the function
+## Reset all column names
+
+no5_tidy_sd <- dcast(melted, Subject + Activity ~ variable, sd)
+no5_tidy_sd[,49] <- "std_dev"
+names(no5_tidy_sd) <- c("Activity", named, "Function")
+
+## rbind the 'means' colums above the 'st_dev' columns
+
+no5_tidy <- rbind(no5_tidy_means, no5_tidy_sd)
 
 ## Output
 write.table(no5_tidy_means, "no5_tidy_means_output.txt")
