@@ -64,17 +64,6 @@ no5_tidy_means <- dcast(melted, Subject + Activity ~ variable, mean)
 no5_tidy_means[,49] <- "mean"
 names(no5_tidy_means) <- c("Activity", named, "Function")
 
-## Calculate StDev by Subject for each Activity using dcast
-## add a 'St_Dev' indicator on each row to identify the function
-## Reset all column names
-
-no5_tidy_sd <- dcast(melted, Subject + Activity ~ variable, sd)
-no5_tidy_sd[,49] <- "std_dev"
-names(no5_tidy_sd) <- c("Activity", named, "Function")
-
-## rbind the 'means' colums above the 'st_dev' columns
-
-no5_tidy <- rbind(no5_tidy_means, no5_tidy_sd)
 
 ## Output
 write.table(no5_tidy_means, "no5_tidy_output.txt", row.names=FALSE)
